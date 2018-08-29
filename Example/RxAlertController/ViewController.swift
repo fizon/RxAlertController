@@ -76,7 +76,9 @@ class ViewController: UIViewController {
                 .disposed(by: bag)
             
         case .select:
-            UIAlertController.rx.show(in: self, title: "Change avatar", message: "Select source", buttons: [.default("Take a picture"), .default("Select from gallery"), .cancel("Cancel")], preferredStyle: .actionSheet)
+            let image = UIImage(named: "Camera")!.scaled(toSize: CGSize(width: 40, height: 40))
+
+            UIAlertController.rx.show(in: self, title: "Change avatar", message: "Select source", buttons: [.defaultWithImage("Take a picture", image), .default("Select from gallery"), .cancel("Cancel")], preferredStyle: .actionSheet)
                 .subscribe(onSuccess: { button in
                     print("Selected option #\(button)")
                 })
@@ -168,3 +170,12 @@ class ViewController: UIViewController {
     }
 }
 
+private extension UIImage {
+    func scaled(toSize newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale);
+        self.draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: newSize.width, height: newSize.height)))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+}
