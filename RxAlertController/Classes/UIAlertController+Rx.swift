@@ -24,9 +24,13 @@ enum RxAlertControllerError: Error {
 extension UIAlertController {
     public enum AlertButton {
         case `default`(String)
+        case defaultWithImage(String, UIImage)
         case disabled(String)
+        case disabledWithImage(String, UIImage)
         case cancel(String)
+        case cancelWithImage(String, UIImage)
         case destructive(String)
+        case destructiveWithImage(String, UIImage)
     }
 }
 
@@ -58,15 +62,24 @@ extension Reactive where Base: UIAlertController {
                 
                 let action: UIAlertAction
                 switch buttons[index] {
-                case .default(let title):
+                case .default(let title), .defaultWithImage(let title, _):
                     action = UIAlertAction(title: title, style: .default, handler: handler)
-                case .cancel(let title):
+                case .cancel(let title), .cancelWithImage(let title, _):
                     action = UIAlertAction(title: title, style: .cancel, handler: handler)
-                case .destructive(let title):
+                case .destructive(let title), .destructiveWithImage(let title, _):
                     action = UIAlertAction(title: title, style: .destructive, handler: handler)
-                case .disabled(let title):
+                case .disabled(let title), .disabledWithImage(let title, _):
                     action = UIAlertAction(title: title, style: .default, handler: handler)
                     action.isEnabled = false
+                }
+                switch buttons[index] {
+                case .defaultWithImage(_, let image),
+                     .cancelWithImage(_, let image),
+                     .destructiveWithImage(_, let image),
+                     .disabledWithImage(_, let image):
+                    action.setValue(image.withRenderingMode(.alwaysOriginal), forKey: "image")
+                case .default, .cancel, .destructive, .disabled:
+                    break
                 }
                 alertView.addAction(action)
             }
