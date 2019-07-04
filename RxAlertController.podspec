@@ -38,5 +38,5 @@ RxAlertController allows you to display messages on the screen, using the sequen
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit'
-  s.dependency 'RxSwift', '~> 4.0'
+  s.dependency 'RxSwift'
 end
